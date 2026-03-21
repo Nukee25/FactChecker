@@ -2,6 +2,8 @@ import asyncio
 import requests
 from bs4 import BeautifulSoup
 
+MAX_CONTENT_LINES = 200
+
 
 async def extract_url_content(url: str) -> str:
     def fetch():
@@ -32,7 +34,7 @@ async def extract_url_content(url: str) -> str:
                 content = soup.get_text(separator="\n", strip=True)
 
             lines = [line.strip() for line in content.splitlines() if line.strip()]
-            return "\n".join(lines[:200])
+            return "\n".join(lines[:MAX_CONTENT_LINES])
         except Exception:
             return ""
 

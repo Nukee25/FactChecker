@@ -12,6 +12,9 @@ from services.evidence_retriever import retrieve_evidence
 from services.url_extractor import extract_url_content
 from services.verifier import verify_claim
 
+TRUE_CLAIM_WEIGHT = 100
+PARTIAL_CLAIM_WEIGHT = 50
+
 app = FastAPI(title="FactChecker API")
 
 app.add_middleware(
@@ -87,7 +90,7 @@ async def verify(request: VerifyRequest):
             false_count = sum(1 for c in verified_claims if c.get("verdict") == "False")
             partial_count = sum(1 for c in verified_claims if c.get("verdict") == "Partially True")
             unverifiable_count = sum(1 for c in verified_claims if c.get("verdict") == "Unverifiable")
-            overall_score = (true_count * 100 + partial_count * 50) / max(total, 1)
+            overall_score = (true_count * TRUE_CLAIM_WEIGHT + partial_count * PARTIAL_CLAIM_WEIGHT) / max(total, 1)
 
             report = {
                 "overall_score": round(overall_score, 1),

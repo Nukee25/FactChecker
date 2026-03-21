@@ -10,7 +10,7 @@ load_dotenv()
 
 genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
 
-_FALLBACK = {
+FALLBACK_RESULT = {
     "verdict": "Unverifiable",
     "confidence": 0,
     "reasoning": "Could not analyze",
@@ -64,11 +64,11 @@ Output ONLY a JSON object:
                 result["evidence"] = evidence
                 return result
 
-            fallback = dict(_FALLBACK)
+            fallback = dict(FALLBACK_RESULT)
             fallback["evidence"] = evidence
             return fallback
         except Exception:
-            fallback = dict(_FALLBACK)
+            fallback = dict(FALLBACK_RESULT)
             fallback["evidence"] = evidence
             return fallback
 

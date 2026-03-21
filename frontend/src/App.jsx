@@ -71,8 +71,8 @@ export default function App() {
                 setError(event.message)
                 setIsLoading(false)
               }
-            } catch {
-              // ignore malformed SSE lines
+            } catch (parseErr) {
+              console.debug('Malformed SSE line, skipping:', parseErr)
             }
           }
         }

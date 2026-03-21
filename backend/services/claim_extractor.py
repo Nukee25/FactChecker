@@ -9,6 +9,8 @@ load_dotenv()
 
 genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
 
+MAX_CLAIMS = 8
+
 
 def extract_claims(text: str) -> list[str]:
     try:
@@ -16,7 +18,7 @@ def extract_claims(text: str) -> list[str]:
         prompt = (
             "Extract all verifiable factual claims from the text. "
             "A verifiable claim is a specific, concrete statement that can be checked against external sources. "
-            "Extract at most 8 claims. "
+            f"Extract at most {MAX_CLAIMS} claims. "
             "Output ONLY a JSON array of strings.\n\n"
             f"TEXT:\n{text}"
         )

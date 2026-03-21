@@ -10,7 +10,7 @@ load_dotenv()
 
 genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
 
-_FALLBACK = {
+FALLBACK_RESULT = {
     "ai_probability": 50,
     "human_probability": 50,
     "confidence": 0,
@@ -46,9 +46,9 @@ Ensure ai_probability + human_probability = 100."""
             if match:
                 return json.loads(match.group())
 
-            return dict(_FALLBACK)
+            return dict(FALLBACK_RESULT)
         except Exception:
-            return dict(_FALLBACK)
+            return dict(FALLBACK_RESULT)
 
     loop = asyncio.get_event_loop()
     return await loop.run_in_executor(None, analyze)
