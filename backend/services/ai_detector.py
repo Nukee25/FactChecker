@@ -20,7 +20,6 @@ FALLBACK_RESULT = {
 
 async def detect_ai_content(text: str) -> dict:
     def analyze():
-        try:
             prompt = f"""Analyze the following text and determine the likelihood that it was written by an AI vs a human.
 
 TEXT:
@@ -38,17 +37,17 @@ Output ONLY a JSON object:
 
 Ensure ai_probability + human_probability = 100."""
 
-            model = genai.GenerativeModel("gemini-1.5-flash")
+            model = genai.GenerativeModel("gemini-2.5-flash")
             response = model.generate_content(prompt)
             raw = response.text.strip()
 
             match = re.search(r"\{.*\}", raw, re.DOTALL)
-            if match:
-                return json.loads(match.group())
+            # if match:
+            return json.loads(match.group())
 
-            return dict(FALLBACK_RESULT)
-        except Exception:
-            return dict(FALLBACK_RESULT)
+            # return dict(FALLBACK_RESULT)
+        # except Exception:
+        #     return dict(FALLBACK_RESULT)
 
     loop = asyncio.get_event_loop()
     return await loop.run_in_executor(None, analyze)
