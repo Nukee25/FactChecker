@@ -28,7 +28,7 @@ cd backend
 pip install -r requirements.txt
 # Optional: choose custom host/model
 # export OLLAMA_HOST=http://localhost:11434
-# export OLLAMA_MODEL=llama3.1
+# export OLLAMA_MODEL=gemma3:4b
 uvicorn main:app --reload
 ```
 

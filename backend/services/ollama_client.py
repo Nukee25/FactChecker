@@ -8,7 +8,7 @@ load_dotenv()
 
 def generate_text(prompt: str) -> str:
     ollama_host = os.getenv("OLLAMA_HOST", "http://localhost:11434").rstrip("/")
-    ollama_model = os.getenv("OLLAMA_MODEL", "llama3.1")
+    ollama_model = os.getenv("OLLAMA_MODEL", "gemma3:4b")
     response = requests.post(
         f"{ollama_host}/api/generate",
         json={"model": ollama_model, "prompt": prompt, "stream": False},

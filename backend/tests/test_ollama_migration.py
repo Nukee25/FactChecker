@@ -1,4 +1,5 @@
 import asyncio
+import os
 import unittest
 from unittest.mock import patch
 
@@ -42,6 +43,16 @@ class OllamaMigrationTests(unittest.TestCase):
         self.assertTrue(call_url.endswith("/api/generate"))
         self.assertEqual(call_json["prompt"], "prompt text")
         self.assertFalse(call_json["stream"])
+
+    def test_ollama_client_uses_gemma3_4b_as_default_model(self):
+        mock_response = unittest.mock.Mock()
+        mock_response.json.return_value = {"response": "hello"}
+        mock_response.raise_for_status.return_value = None
+        with patch.dict(os.environ, {}, clear=True):
+            with patch("services.ollama_client.requests.post", return_value=mock_response) as mock_post:
+                generate_text("prompt text")
+        call_json = mock_post.call_args.kwargs["json"]
+        self.assertEqual(call_json["model"], "gemma3:4b")
 
 
 if __name__ == "__main__":
