@@ -12,7 +12,7 @@ AI-powered fact verification system that validates text integrity against real-t
 ## Tech Stack
 - **Backend**: Python FastAPI with async streaming
 - **Frontend**: React + Vite + TailwindCSS
-- **LLM**: Google Gemini 1.5 Flash
+- **LLM**: Local Ollama models
 - **Search**: DuckDuckGo Search API
 
 ## Setup
@@ -20,14 +20,15 @@ AI-powered fact verification system that validates text integrity against real-t
 ### Prerequisites
 - Python 3.10+
 - Node.js 18+
-- Google Gemini API key (get one at https://aistudio.google.com/)
+- Ollama installed and running locally
 
 ### Backend
 ```bash
 cd backend
 pip install -r requirements.txt
-cp .env.example .env
-# Edit .env and add your GEMINI_API_KEY
+# Optional: choose custom host/model
+# export OLLAMA_HOST=http://localhost:11434
+# export OLLAMA_MODEL=llama3.1
 uvicorn main:app --reload
 ```
 

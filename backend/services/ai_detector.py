@@ -1,14 +1,8 @@
 import asyncio
 import json
-import os
 import re
 
-import google.generativeai as genai
-from dotenv import load_dotenv
-
-load_dotenv()
-
-genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
+from services.ollama_client import generate_text
 
 FALLBACK_RESULT = {
     "ai_probability": 50,
@@ -20,6 +14,7 @@ FALLBACK_RESULT = {
 
 async def detect_ai_content(text: str) -> dict:
     def analyze():
+        try:
             prompt = f"""Analyze the following text and determine the likelihood that it was written by an AI vs a human.
 
 TEXT:
@@ -37,17 +32,14 @@ Output ONLY a JSON object:
 
 Ensure ai_probability + human_probability = 100."""
 
-            model = genai.GenerativeModel("gemini-2.5-flash")
-            response = model.generate_content(prompt)
-            raw = response.text.strip()
+            raw = generate_text(prompt)
 
             match = re.search(r"\{.*\}", raw, re.DOTALL)
-            # if match:
+            if not match:
+                return dict(FALLBACK_RESULT)
             return json.loads(match.group())
-
-            # return dict(FALLBACK_RESULT)
-        # except Exception:
-        #     return dict(FALLBACK_RESULT)
+        except Exception:
+            return dict(FALLBACK_RESULT)
 
     loop = asyncio.get_event_loop()
     return await loop.run_in_executor(None, analyze)

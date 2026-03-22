@@ -1,14 +1,9 @@
 import asyncio
 import json
-import os
 import re
 
-import google.generativeai as genai
-from dotenv import load_dotenv
+from services.ollama_client import generate_text
 
-load_dotenv()
-
-genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
 
 FALLBACK_RESULT = {
     "verdict": "Unverifiable",
@@ -54,9 +49,7 @@ Output ONLY a JSON object:
   "conflicting_sources": [<list of conflicting source URLs if any>]
 }}"""
 
-            model = genai.GenerativeModel("gemini-1.5-flash")
-            response = model.generate_content(prompt)
-            raw = response.text.strip()
+            raw = generate_text(prompt)
 
             match = re.search(r"\{.*\}", raw, re.DOTALL)
             if match:

@@ -1,6 +1,5 @@
 fastapi
 uvicorn[standard]
-google-generativeai
 duckduckgo-search
 beautifulsoup4
 requests
