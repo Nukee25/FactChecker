@@ -3,28 +3,37 @@ import Header from './components/Header'
 import InputForm from './components/InputForm'
 import ProgressTracker from './components/ProgressTracker'
 import AccuracyReport from './components/AccuracyReport'
+import MediaReport from './components/MediaReport'
 
 export default function App() {
   const [input, setInput] = useState('')
   const [inputType, setInputType] = useState('text')
+  const [mediaFile, setMediaFile] = useState(null)
   const [isLoading, setIsLoading] = useState(false)
   const [stage, setStage] = useState('')
   const [progress, setProgress] = useState(0)
   const [progressMessage, setProgressMessage] = useState('')
   const [report, setReport] = useState(null)
+  const [mediaResult, setMediaResult] = useState(null)
   const [currentClaim, setCurrentClaim] = useState(0)
   const [totalClaims, setTotalClaims] = useState(0)
   const [error, setError] = useState(null)
 
-  const handleVerify = async () => {
+  const resetState = () => {
     setIsLoading(true)
     setReport(null)
+    setMediaResult(null)
     setError(null)
     setStage('extracting')
     setProgress(0)
-    setProgressMessage('Starting verification...')
+    setProgressMessage('Starting...')
     setCurrentClaim(0)
     setTotalClaims(0)
+  }
+
+  const handleVerify = async () => {
+    resetState()
+    setProgressMessage('Starting verification...')
 
     try {
       const response = await fetch('/api/verify', {
@@ -83,6 +92,43 @@ export default function App() {
     }
   }
 
+  const handleCheckMedia = async () => {
+    resetState()
+    setStage('analyzing')
+    setProgressMessage('Analyzing media authenticity...')
+    setProgress(30)
+
+    try {
+      const formData = new FormData()
+      if (mediaFile) {
+        formData.append('file', mediaFile)
+      } else {
+        formData.append('url', input)
+      }
+
+      const response = await fetch('/api/check-media', {
+        method: 'POST',
+        body: formData,
+      })
+
+      if (!response.ok) {
+        throw new Error(`Server error: ${response.status}`)
+      }
+
+      const result = await response.json()
+      if (result.error) throw new Error(result.error)
+
+      setMediaResult(result)
+      setProgress(100)
+      setStage('complete')
+      setProgressMessage('Analysis complete!')
+    } catch (err) {
+      setError(err.message)
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
   return (
     <div className="min-h-screen bg-gray-950 text-white">
       <Header />
@@ -93,7 +139,10 @@ export default function App() {
           inputType={inputType}
           setInputType={setInputType}
           onVerify={handleVerify}
+          onCheckMedia={handleCheckMedia}
           isLoading={isLoading}
+          mediaFile={mediaFile}
+          setMediaFile={setMediaFile}
         />
 
         {error && (
@@ -112,6 +161,7 @@ export default function App() {
           />
         )}
 
+        {mediaResult && <MediaReport result={mediaResult} />}
         {report && <AccuracyReport report={report} />}
       </main>
     </div>
