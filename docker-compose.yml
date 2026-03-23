@@ -4,6 +4,9 @@ services:
   ollama:
     image: ollama/ollama:latest
     container_name: factchecker-ollama
+    environment:
+      - OLLAMA_VULKAN=1
+      - OLLAMA_HOST=0.0.0.0:11434
     volumes:
       - ollama_data:/root/.ollama
     networks:
