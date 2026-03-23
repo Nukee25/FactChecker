@@ -25,7 +25,7 @@ async def verify_claim(claim: str, evidence: list) -> dict:
 
             if not evidence_urls:
                 fallback = dict(FALLBACK_RESULT)
-                fallback["reasoning"] = "No DuckDuckGo search evidence was found for this claim."
+                fallback["reasoning"] = "No DuckDuckGo search evidence URLs were provided for this claim. Cannot verify without search results."
                 fallback["evidence"] = evidence
                 return fallback
 
@@ -47,11 +47,11 @@ CLAIM: {claim}
 EVIDENCE:
 {evidence_text}
 
-            Think step-by-step internally and then provide only the final JSON output.
-            1. What does each source say about this claim?
-            2. Is there consensus or conflict among sources?
-            3. How strong is the evidence?
-            4. What is your verdict?
+Do not reveal internal reasoning. Provide a concise explanation in the "reasoning" field based only on the provided evidence.
+1. What does each source say about this claim?
+2. Is there consensus or conflict among sources?
+3. How strong is the evidence?
+4. What is your verdict?
 
 Output ONLY a JSON object:
 {{
