@@ -25,7 +25,7 @@ async def verify_claim(claim: str, evidence: list) -> dict:
 
             if not evidence_urls:
                 fallback = dict(FALLBACK_RESULT)
-                fallback["reasoning"] = "No DuckDuckGo search evidence URLs were provided for this claim. Cannot verify without search results."
+                fallback["reasoning"] = "No search evidence URLs were provided for this claim. Cannot verify without search results."
                 fallback["evidence"] = evidence
                 return fallback
 
@@ -38,7 +38,7 @@ async def verify_claim(claim: str, evidence: list) -> dict:
                 )
             evidence_text = "\n\n".join(evidence_lines) if evidence_lines else "No evidence available."
 
-            prompt = f"""You are an expert fact-checker. Verify the following claim using ONLY the provided DuckDuckGo search evidence.
+            prompt = f"""You are an expert fact-checker. Verify the following claim using ONLY the provided search evidence.
 You MUST NOT use prior knowledge, memory, or assumptions.
 If the evidence is insufficient to confirm or refute the claim, return "Unverifiable".
 

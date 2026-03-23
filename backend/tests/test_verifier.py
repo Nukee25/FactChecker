@@ -13,7 +13,7 @@ class VerifyClaimTests(unittest.IsolatedAsyncioTestCase):
         result = await verify_claim("The earth is flat", [])
 
         self.assertEqual(result["verdict"], "Unverifiable")
-        self.assertIn("DuckDuckGo search evidence URLs", result["reasoning"])
+        self.assertIn("No search evidence URLs", result["reasoning"])
         self.assertEqual(result["evidence"], [])
 
     async def test_filters_sources_not_in_evidence(self):

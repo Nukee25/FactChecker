@@ -1,7 +1,7 @@
 fastapi
 uvicorn[standard]
 ollama
-duckduckgo-search
+tavily-python
 beautifulsoup4
 requests
 python-multipart
