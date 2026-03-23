@@ -1,6 +1,14 @@
 version: "3.9"
 
 services:
+  ollama:
+    image: ollama/ollama:latest
+    container_name: factchecker-ollama
+    volumes:
+      - ollama_data:/root/.ollama
+    networks:
+      - private
+
   backend:
     image: python:3.11-slim
     container_name: factchecker-backend
@@ -10,6 +18,10 @@ services:
       - ./backend:/app
     env_file:
       - ./backend/.env
+    environment:
+      - OLLAMA_HOST=http://ollama:11434
+    depends_on:
+      - ollama
     networks:
       - private
       - publicweb
@@ -32,3 +44,6 @@ networks:
   private:
   publicweb:
     external: true
+
+volumes:
+  ollama_data:

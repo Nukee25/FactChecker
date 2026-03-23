@@ -1,7 +1,7 @@
 import asyncio
 import json
 
-from fastapi import FastAPI
+from fastapi import FastAPI, File, Form, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import StreamingResponse
 from pydantic import BaseModel
@@ -9,6 +9,7 @@ from pydantic import BaseModel
 from services.ai_detector import detect_ai_content
 from services.claim_extractor import extract_claims
 from services.evidence_retriever import retrieve_evidence
+from services.media_checker import check_media_authenticity, check_media_from_url
 from services.url_extractor import extract_url_content
 from services.verifier import verify_claim
 
@@ -38,6 +39,21 @@ def sse(data: dict) -> str:
 @app.get("/api/health")
 async def health():
     return {"status": "ok"}
+
+
+@app.post("/api/check-media")
+async def check_media(
+    file: UploadFile | None = File(default=None),
+    url: str | None = Form(default=None),
+):
+    if file is not None:
+        image_data = await file.read()
+        result = await check_media_authenticity(image_data)
+    elif url:
+        result = await check_media_from_url(url)
+    else:
+        return {"error": "Provide either a file or a url"}
+    return result
 
 
 @app.post("/api/verify")
