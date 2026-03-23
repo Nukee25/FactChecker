@@ -1,23 +1,29 @@
 import asyncio
+import os
 
-from duckduckgo_search import DDGS
+from tavily import TavilyClient
 
 
 async def retrieve_evidence(claim: str) -> list[dict]:
     def search():
         try:
-            with DDGS() as ddgs:
-                results = ddgs.text(claim, max_results=5)
-                evidence = []
-                for r in results:
-                    evidence.append(
-                        {
-                            "title": r.get("title", ""),
-                            "url": r.get("href", ""),
-                            "snippet": r.get("body", ""),
-                        }
-                    )
-                return evidence
+            api_key = os.getenv("TAVILY_API_KEY")
+            if not api_key:
+                return []
+
+            client = TavilyClient(api_key=api_key)
+            response = client.search(query=claim, max_results=5)
+            results = response.get("results", []) if isinstance(response, dict) else []
+            evidence = []
+            for r in results:
+                evidence.append(
+                    {
+                        "title": r.get("title", ""),
+                        "url": r.get("url", ""),
+                        "snippet": r.get("content", ""),
+                    }
+                )
+            return evidence
         except Exception:
             return []
 

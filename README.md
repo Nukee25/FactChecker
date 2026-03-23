@@ -13,7 +13,7 @@ AI-powered fact verification system that validates text integrity against real-t
 - **Backend**: Python FastAPI with async streaming
 - **Frontend**: React + Vite + TailwindCSS
 - **LLM**: Ollama + Gemma3
-- **Search**: DuckDuckGo Search API
+- **Search**: Tavily Search API
 
 ## Setup
 
