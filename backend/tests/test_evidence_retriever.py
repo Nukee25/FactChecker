@@ -9,12 +9,6 @@ from services.evidence_retriever import retrieve_evidence
 
 
 class RetrieveEvidenceTests(unittest.IsolatedAsyncioTestCase):
-    def setUp(self):
-        from services import evidence_retriever
-
-        evidence_retriever._TAVILY_CLIENT = None
-        evidence_retriever._TAVILY_API_KEY = None
-
     async def test_maps_tavily_results_to_evidence_shape(self):
         response = {
             "results": [
