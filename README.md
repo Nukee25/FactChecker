@@ -12,7 +12,7 @@ AI-powered fact verification system that validates text integrity against real-t
 ## Tech Stack
 - **Backend**: Python FastAPI with async streaming
 - **Frontend**: React + Vite + TailwindCSS
-- **LLM**: Google Gemini 1.5 Flash
+- **LLM**: Ollama + Gemma3
 - **Search**: DuckDuckGo Search API
 
 ## Setup
@@ -20,23 +20,11 @@ AI-powered fact verification system that validates text integrity against real-t
 ### Prerequisites
 - Python 3.10+
 - Node.js 18+
-- Google Gemini API key (get one at https://aistudio.google.com/)
+- Ollama + Gemma3:4b
+- Docker
 
-### Backend
-```bash
-cd backend
-pip install -r requirements.txt
-cp .env.example .env
-# Edit .env and add your GEMINI_API_KEY
-uvicorn main:app --reload
-```
-
-### Frontend
-```bash
-cd frontend
-npm install
-npm run dev
-```
+### Docker
+- docker compose up --build
 
 Open http://localhost:5173 in your browser.
 
