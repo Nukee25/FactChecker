@@ -37,7 +37,8 @@ class VerifyClaimTests(unittest.IsolatedAsyncioTestCase):
         self.assertEqual(result["evidence"], ddgs_evidence)
 
     async def test_returns_unverifiable_when_no_evidence_urls(self):
-        result = await verify_claim("The earth is flat", [])
+        with patch("services.verifier.retrieve_evidence", new=AsyncMock(return_value=[])):
+            result = await verify_claim("The earth is flat", [])
 
         self.assertEqual(result["verdict"], "Unverifiable")
         self.assertIn("DuckDuckGo search evidence URLs", result["reasoning"])
