@@ -2,6 +2,7 @@ import asyncio
 import json
 import re
 
+from services.evidence_retriever import retrieve_evidence
 from services.ollama_client import generate_text
 
 FALLBACK_RESULT = {
@@ -14,6 +15,9 @@ FALLBACK_RESULT = {
 
 
 async def verify_claim(claim: str, evidence: list) -> dict:
+    if not evidence:
+        evidence = await retrieve_evidence(claim)
+
     def analyze():
         try:
             evidence_lines = []
