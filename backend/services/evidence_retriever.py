@@ -1,7 +1,5 @@
 import asyncio
-
-from duckduckgo_search import DDGS
-
+from ddgs import DDGS
 
 async def retrieve_evidence(claim: str) -> list[dict]:
     def search():
