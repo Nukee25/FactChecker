@@ -14,7 +14,7 @@ _client = ollama.Client(host=OLLAMA_HOST)
 
 
 def generate_text(prompt: str) -> str:
-    response = _client.generate(model="gemma3:4b-cloud", prompt=prompt)
+    response = _client.generate(model="gemma3:27b-cloud", prompt=prompt)
     return response.response
 
 
